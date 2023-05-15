@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giám Sát Nhà Yến</title>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-storage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.0.4/css/all.css"
+    />
+    <link
+      href="https://use.fontawesome.com/releases/v5.0.4/css/all.css"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <aside>
+        <div class="top">
+          <div class="logo">
+            <h2>             </h2>
+          </div>
+          <div class="close" id="close-btn">
+            <span class="material-icons-sharp">close</span>
+          </div>
+        </div>
+        <div class="sidebar">
+          <a href="index.html">
+            <span class="material-icons-sharp"> home </span>
+            <h3>Bảng Điều Khiển</h3>
+          </a>
+          <a href="camera.html">
+            <span class="material-icons-sharp"> camera </span>
+            <h3>Camera</h3>
+          </a>
+          <a href="history.html" class="active">
+            <span class="material-icons-sharp"> history </span>
+            <h3>Lịch Sử</h3>
+          </a>
+          <a></a>
+        </div>
+      </aside>
+
+      <main>
+        <h1>Bảng Điều Khiển - <span id="current-time"></span></h1>
+
+        <div class="insights">
+          <!-- Temperature -->
+          <div class="temperature">
+            <div class="middle">
+              <div class="left">
+                <h2>Nhiệt Độ</h2>
+                <h1 id="Temperature">&deg;C</h1>
+              </div>
+              <div class="progress">
+                <img src="./img/temp.png" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Humidity -->
+          <div class="humidity">
+            <div class="middle">
+              <div class="left">
+                <h2>Độ Ẩm</h2>
+                <h1 id="Humidity">%</h1>
+              </div>
+              <div class="progress">
+                <img src="./img/Humi.png" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Light -->
+          <div class="light">
+            <div class="middle">
+              <div class="left">
+                <h2>Ánh Sáng</h2>
+                <h1 id="Light">lx</h1>
+              </div>
+              <div class="progress">
+                <img src="./img/light.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Lịch Sử Cảm Biến Môi Trường</h2>
+        <button id="execl" onclick="exportToExcel()">Tải Về File Excel</button>
+        <div class="message">
+          <table id="history--table">
+            <thead>
+              <tr>
+                <th>Thời Gian</th>
+                <th>Nhiệt Độ</th>
+                <th>Độ Ẩm</th>
+                <th>Ánh Sáng</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody-history"></tbody>
+          </table>
+        </div>
+      </main>
+
+      <div class="right">
+        <div class="top">
+          <button id="menu-btn">
+            <span class="material-icons-sharp"> menu </span>
+          </button>
+          <div class="theme-toggler">
+            <span class="material-icons-sharp active"> light_mode </span>
+            <span class="material-icons-sharp"> dark_mode </span>
+          </div>
+        </div>
+
+        <div class="device">
+          <h2>Điều Khiển Thiết Bị</h2>
+          <!-- auto -->
+          <div class="item">
+            <div class="right">
+              <div class="info">
+                <h2>Tự Động</h2>
+              </div>
+              <div class="wrapper">
+                <div class="progress">
+                  <div class="toggle-btn5" id="unact5">
+                    <div class="inner-circle"></div>
+                  </div>
+                  <div class="toggle-btn5 active" id="act5">
+                    <div class="inner-circle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quạt -->
+          <div class="item">
+            <div class="right">
+              <div class="info">
+                <h2>Quạt</h2>
+              </div>
+              <div class="wrapper">
+                <div class="progress">
+                  <div class="toggle-btn1" id="unact1">
+                    <div class="inner-circle"></div>
+                  </div>
+                  <div class="toggle-btn1 active" id="act1">
+                    <div class="inner-circle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- đèn sưởi -->
+          <div class="item">
+            <div class="right">
+              <div class="info">
+                <h2>Đèn Sưởi Ấm</h2>
+              </div>
+              <div class="wrapper">
+                <div class="progress">
+                  <div class="toggle-btn2" id="unact2">
+                    <div class="inner-circle"></div>
+                  </div>
+                  <div class="toggle-btn2 active" id="act2">
+                    <div class="inner-circle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- đèn cú -->
+          <div class="item">
+            <div class="right">
+              <div class="info">
+                <h2>Đèn Chống Cú</h2>
+              </div>
+              <div class="wrapper">
+                <div class="progress">
+                  <div class="toggle-btn" id="unact">
+                    <div class="inner-circle"></div>
+                  </div>
+                  <div class="toggle-btn active" id="act">
+                    <div class="inner-circle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- phun sương -->
+          <div class="item">
+            <div class="right">
+              <div class="info">
+                <h2>Phun Sương</h2>
+              </div>
+              <div class="wrapper">
+                <div class="progress">
+                  <div class="toggle-btn4" id="unact4">
+                    <div class="inner-circle"></div>
+                  </div>
+                  <div class="toggle-btn4 active" id="act4">
+                    <div class="inner-circle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Music -->
+          <div class="item">
+            <div class="right">
+              <div class="info">
+                <h2>Tiếng Gọi Yến</h2>
+              </div>
+              <div class="wrapper">
+                <div class="progress">
+                  <div class="toggle-btn3" id="unact3">
+                    <div class="inner-circle"></div>
+                  </div>
+                  <div class="toggle-btn3 active" id="act3">
+                    <div class="inner-circle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/history-data.js"></script>
+  </body>
+</html>
