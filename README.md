@@ -12,6 +12,6 @@ Giao diện web tĩnh (HTML/CSS/JS) để **giám sát và quản lý nhà nuôi
 - **Điều hướng**: Sidebar giữa `Bảng điều khiển`, `Camera`, `Lịch sử`.
 
 > Thư viện sử dụng: Firebase Web SDK v8 (App/Database/Auth/Firestore/Storage), Google Charts, jQuery, Material Icons, Font Awesome.
-
+> Video demo: https://youtu.be/MzXZBnbayxw?si=L8Rl8iHLI8UhCwI1
 ---
 
